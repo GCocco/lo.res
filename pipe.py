@@ -38,10 +38,10 @@ class Pipe:
         return None
 
     @staticmethod
-    def getRow(row: int):
+    def get_row(row: int):
         if row in Pipe._rows:
             return Pipe._rows[row]
-        return 
+        return Row()
     
     @staticmethod
     def delete(row: int, col: int) -> Row:

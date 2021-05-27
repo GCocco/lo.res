@@ -2,6 +2,7 @@ from os import popen, system
 from time import sleep
 from threading import Thread
 from pipe import Pipe
+import aspects
 
 class WH:
     size = popen("stty size").read().split()
@@ -20,11 +21,20 @@ class WH:
     @staticmethod
     def update():
         system("clear")
-        print("#"*WH._cols)
+        print(f"{aspects.Frame}"*int(WH._cols/2))
         for i in range(0, WH._rows-3):
-            print(f'#{" "*(WH._cols-2)}#')
+            row = Pipe.get_row(i)
+            k = 2
+            print(f"{aspects.Frame}", end="")
+            for col in row.keys():
+                if col >= (WH._cols-2):
+                    break
+                print(f"{' '*(col-k)}{row[col]}", end="")
+                k = col + 2
+                pass
+            print(f"{' '*(WH._cols-k-3)}{aspects.Frame}")
             pass
-        print("#"*WH._cols)
+        print(aspects.Frame*int(WH._cols/2))
         return
 
     @staticmethod
@@ -59,4 +69,8 @@ class WH:
 #DEBUG ZONE
 #TODO: CANCELLARE QUESTA ROBA
 
-Pipe.add(5, 5, "Y")
+Pipe.add(5, 5, aspects.Wall)
+Pipe.add(5, 6, aspects.Wall)
+Pipe.add(5, 10, aspects.Wall)
+Pipe.add(10, 10, aspects.Wall)
+Pipe.add(7, 50, aspects.Wall)
