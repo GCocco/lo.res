@@ -1,3 +1,4 @@
-Frame = '⚫'
+Frame = '⬜'
 Avatar = '🚶'
-Wall = '⬜'
+Wall = '🔲'
+Blank = '  '
