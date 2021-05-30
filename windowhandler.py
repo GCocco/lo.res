@@ -34,24 +34,24 @@ class WH:
     @staticmethod
     def update():
         system("clear")
-        print(aspects.Frame*WH._cols)
+        print(aspects.FRAME*WH._cols)
         for i in range(0, WH._rows-4):
             row = Pipe.get_row(i)
             WH._printrow(row)
             pass
-        print(aspects.Frame*WH._cols)
+        print(aspects.FRAME*WH._cols)
         return
 
     @staticmethod
     def _printrow(row):
         k = 2
-        print(aspects.Frame, end='')
+        print(aspects.FRAME, end='')
         for col in row.keys():
             if col > WH._cols:
                 break
-            print(aspects.Blank * (col-k) + row[col].aspect, end='')
+            print(aspects.BLANK * (col-k) + row[col].aspect, end='')
             k = col + 1
-        print(aspects.Blank*(WH._cols-k) + aspects.Frame)
+        print(aspects.BLANK*(WH._cols-k) + aspects.FRAME)
         return
     
     @staticmethod

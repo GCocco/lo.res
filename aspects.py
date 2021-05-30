@@ -1,4 +1,7 @@
-Frame = '⬜'
-Avatar = '🚶'
-Wall = '🔲'
-Blank = '  '
+'''
+Here are defined Pipeline objects aspects
+'''
+FRAME = '⬜'
+AVATAR = '🚶'
+WALL = '🔲'
+BLANK = '  '

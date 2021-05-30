@@ -1,31 +1,34 @@
+'''
+Main module for setting and input handling
+'''
 from windowhandler import WH
 from getch import getch
-
 
 from pipelements import Avatar, PipeElement
 import aspects
 
 from directions import Direction
 
-av = Avatar((7,7))
-PipeElement(aspects.Wall, (7,6))
+AVATAR = Avatar((7, 7))
+PipeElement(aspects.WALL, (7, 6))
 
 def input_handler():
-    ch = getch()
-    if ch == 'w' or ch == 'W':
-        av.move(Direction.Up)
-    elif ch == 'd' or ch == 'D':
-        av.move(Direction.Right)
-    elif ch == 's' or ch == 'S':
-        av.move(Direction.Down)
-    elif ch == 'a' or ch == 'A':
-        av.move(Direction.Left)
+    '''
+    waits for a input and processes it
+    '''
+    ch_input: str = getch()
+    if ch_input in ('w', 'W'):
+        AVATAR.move(Direction.Up)
+    elif ch_input in ('d', 'D'):
+        AVATAR.move(Direction.Right)
+    elif ch_input in ('s', 'S'):
+        AVATAR.move(Direction.Down)
+    elif ch_input in ('a', 'A'):
+        AVATAR.move(Direction.Left)
     WH.update()
-    return
 
 if __name__ == "__main__":
-    update_process = WH.run_loop()
+    UPDATE_THREAD = WH.run_loop()
     while True:
         input_handler()
         continue
-    pass
