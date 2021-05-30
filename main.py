@@ -1,5 +1,5 @@
 from windowhandler import WH
-from utils import getch
+from getch import getch
 
 
 from pipelements import Avatar, PipeElement
@@ -20,8 +20,7 @@ def input_handler():
         av.move(Direction.Down)
     elif ch == 'a' or ch == 'A':
         av.move(Direction.Left)
-    elif ch == ' ':
-        WH.update()
+    WH.update()
     return
 
 if __name__ == "__main__":
