@@ -24,7 +24,7 @@ class WH:
     @staticmethod
     def update_size() -> bool:
         sizes = popen("stty size").read().split()
-        sizes = int(sizes[0])-WH.__COMP, int(sizes[1])-WH.__COMP
+        sizes = int(sizes[0]), int(int(sizes[1])/2)
         if sizes[0] == WH._rows and sizes[1] == WH._cols:
             return False
         WH._rows = sizes[0]
@@ -34,24 +34,24 @@ class WH:
     @staticmethod
     def update():
         system("clear")
-        print(aspects.Frame*int(WH._cols/WH.__COMP))
+        print(aspects.Frame*WH._cols)
         for i in range(0, WH._rows-4):
             row = Pipe.get_row(i)
             WH._printrow(row)
             pass
-        print(aspects.Frame*int(WH._cols/WH.__COMP))
+        print(aspects.Frame*WH._cols)
         return
 
     @staticmethod
     def _printrow(row):
-        k = WH.__COMP
+        k = 2
         print(aspects.Frame, end='')
         for col in row.keys():
             if col > WH._cols:
                 break
-            print(aspects.Blank * int((col-k)/WH.__COMP) + row[col].aspect, end='')
-            k = col + WH.__COMP + 1
-        print(aspects.Blank*int((WH._cols-k)/WH.__COMP) + aspects.Frame)
+            print(aspects.Blank * (col-k) + row[col].aspect, end='')
+            k = col + 1
+        print(aspects.Blank*(WH._cols-k) + aspects.Frame)
         return
     
     @staticmethod
@@ -68,7 +68,7 @@ class WH:
     def run_loop():
         WH.update()
         daem = Thread(target=WH._win_manager_loop, daemon=True)
-        daem.run()
+        daem.start()
         return daem
     
     pass

@@ -27,7 +27,7 @@ class Row(dict):
 
     def pop(self, key: int):
         if key in self:
-            super.pop(key)
+            super().pop(key)
             return
         return
     pass
@@ -59,7 +59,7 @@ class Pipe:
     
     @staticmethod
     def delete(row: int, col: int) -> Row:
-        if row in self._rows:
+        if row in Pipe._rows:
             Pipe._rows[row].pop(col)
             if len(Pipe._rows[row]) == 0:
                 Pipe._rows.pop(row)

@@ -40,10 +40,8 @@ class Avatar(PipeElement):
         else:
             raise Exception("argument must be a valid Direction")
 
-        if Pipe.get(*move_to):
-            return False
-        Pipe.delete(*self._xy)
         Pipe.add(*move_to, self)
+        Pipe.delete(*self._xy)
         self._xy = move_to
         return True
 
