@@ -22,6 +22,7 @@ class WH:
         Sets the given pipe as the one to be rendered and updated
         '''
         WH._current_pipe = r_pipe
+        WH.update_size()
         WH.update()
 
     @staticmethod
