@@ -49,8 +49,8 @@ class WH:
         for col in row.keys():
             if col > WH._cols:
                 break
-            print(aspects.Blank*int((col-k)/WH.__COMP) + row[col], end='')
-            k = col + WH.__COMP
+            print(aspects.Blank * int((col-k)/WH.__COMP) + row[col].aspect, end='')
+            k = col + WH.__COMP + 1
         print(aspects.Blank*int((WH._cols-k)/WH.__COMP) + aspects.Frame)
         return
     
@@ -73,12 +73,3 @@ class WH:
     
     pass
 
-
-#DEBUG ZONE
-#TODO: CANCELLARE QUESTA ROBA
-
-Pipe.add(5, 5, aspects.Wall)
-Pipe.add(5, 6, aspects.Wall)
-Pipe.add(5, 10, aspects.Wall)
-Pipe.add(10, 10, aspects.Wall)
-Pipe.add(7, 50, aspects.Wall)

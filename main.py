@@ -2,10 +2,13 @@ from windowhandler import WH
 from getch import getch
 
 
-from pipelements import Avatar
+from pipelements import Avatar, PipeElement
+import aspects
+
 from directions import Direction
 
 av = Avatar((7,7))
+PipeElement(aspects.Wall, (7,6))
 
 def input_handler():
     ch = getch()
@@ -18,6 +21,7 @@ def input_handler():
     elif ch == 'a' or ch == 'A':
         av.move(Direction.Left)
     Pipe.update()
+    print("ovolollo")
     return
 
 if __name__ == "__main__":

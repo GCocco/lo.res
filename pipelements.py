@@ -1,6 +1,6 @@
 import aspects
 from directions import Direction
-from pipe import Pipe
+from pipe import Pipe, OccupiedSpaceError
 
 
 class PipeElement:
@@ -8,9 +8,11 @@ class PipeElement:
     def __init__(self, emj: str, xy: 'tuple[int, int]'):
         self._emj = emj
         self._xy: 'tuple[int, int]' = xy
+        Pipe.add(*xy, self)
         pass
-
-    def __repr__(self) -> str:
+    
+    @property
+    def aspect(self) -> str:
         return self._emj
     pass
 

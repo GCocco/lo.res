@@ -1,3 +1,10 @@
+class OccupiedSpaceError(Exception):
+    def __init__(self, row_col):
+        super().__init__(f"{row_col} is occupied by {Pipe.get(*row_col)}")
+        pass
+    pass
+
+
 class Row(dict):
     def __init__(self, *args):
         if len(args) == 0:
@@ -13,6 +20,11 @@ class Row(dict):
             raise Exception("Invalid arguments for Row " + args)
         pass
 
+    def keys(self):
+        l = list(super().keys())
+        l.sort()
+        return l
+
     def pop(self, key: int):
         if key in self:
             super.pop(key)
@@ -26,6 +38,8 @@ class Pipe:
     @staticmethod
     def add(row, col, obj):
         if row in Pipe._rows:
+            if Pipe._rows[row].get(col):
+                raise OccupiedSpaceError((row, col))
             Pipe._rows[row][col] = obj
             return
         Pipe._rows[row] = Row(col, obj)
