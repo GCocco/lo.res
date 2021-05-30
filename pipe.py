@@ -1,69 +1,103 @@
+'''
+Here are defined Classes to easy handle the screen printing.
+'''
+
 class OccupiedSpaceError(Exception):
-    def __init__(self, row_col):
-        super().__init__(f"{row_col} is occupied by {Pipe.get(*row_col)}")
-        pass
-    pass
+    '''
+    Exception raised when attempting to place a PipeElement in an already occupied slot.
+    '''
+    def __init__(self, pipe: 'Pipe', row_col):
+        '''
+        Your basic Exception constructor
+        '''
+        super().__init__(f"{row_col} is occupied by {pipe.get(*row_col)}")
+        self._collided = pipe.get(*row_col)
 
 
 class Row(dict):
+    '''
+    Abstraction of a row. Only occupied slots are stored.
+    '''
     def __init__(self, *args):
+        '''
+        Multiple constructors:
+        Row()
+        Row({int: PipeElement})
+        Row(int, PipeElement)
+        '''
         if len(args) == 0:
             super().__init__()
-            pass
         elif len(args) == 1:
             super().__init__(args[0])
-            pass
         elif len(args) == 2:
             super().__init__({args[0]: args[1]})
-            pass
         else:
             raise Exception("Invalid arguments for Row " + args)
-        pass
 
-    def keys(self):
-        l = list(super().keys())
-        l.sort()
-        return l
+    def keys(self) -> 'list[int]':
+        '''
+        Returns the set of keys as a sorted list
+        '''
+        key_list = list(super().keys())
+        key_list.sort()
+        return key_list
 
     def pop(self, key: int):
+        '''
+        Overrides dict.pop().
+        Doesn't raise KeyError if the key is not in the dictionary
+        '''
+
         if key in self:
             super().pop(key)
-            return
-        return
-    pass
+
 
 class Pipe:
+    '''
+    An abstraction of the screen matrix, contains the vaious rows.
+    '''
     _rows = dict()
 
-    @staticmethod
-    def add(row, col, obj):
-        if row in Pipe._rows:
-            if Pipe._rows[row].get(col):
-                raise OccupiedSpaceError((row, col))
-            Pipe._rows[row][col] = obj
-            return
-        Pipe._rows[row] = Row(col, obj)
-        return
+    def __init__(self):
+        '''
+        Pipe constructor
+        '''
+        self._rows = dict()
 
-    @staticmethod
-    def get(row: int, col: int):
-        if row in Pipe._rows:
-            return Pipe._rows.get(col)
+    def add(self, row: int, col: int, obj: 'PipeElement'):
+        '''
+        Adds a PipeElement in the row,col slot
+        '''
+        if row in self._rows:
+            if self._rows[row].get(col):
+                raise OccupiedSpaceError(self, (row, col))
+            self._rows[row][col] = obj
+            return
+        self._rows[row] = Row(col, obj)
+
+    def get(self, row: int, col: int) -> 'union[PipeElement, None]':
+        '''
+        Returns the PipeElement in the given Slot, None if empty.
+        '''
+        if row in self._rows:
+            return self._rows.get(col)
         return None
 
-    @staticmethod
-    def get_row(row: int):
-        if row in Pipe._rows:
-            return Pipe._rows[row]
+    def get_row(self, row: int) -> 'Row':
+        '''
+        returns the Row in given index
+        '''
+        if row in self._rows:
+            return self._rows[row]
         return Row()
-    
-    @staticmethod
-    def delete(row: int, col: int) -> Row:
-        if row in Pipe._rows:
-            Pipe._rows[row].pop(col)
-            if len(Pipe._rows[row]) == 0:
-                Pipe._rows.pop(row)
+
+    def delete(self, row: int, col: int) -> 'Row':
+        '''
+        Deletes the PipeElement from the given Slot. If the row is emptied, it gets cancelled.
+        '''
+        if row in self._rows:
+            self._rows[row].pop(col)
+            if len(self._rows[row]) == 0:
+                self._rows.pop(row)
             return Row()
-        return
-    
-    pass
+        return None

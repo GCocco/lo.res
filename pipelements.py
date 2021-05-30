@@ -3,7 +3,7 @@ This module contains pipe-renderable classes.
 '''
 import aspects
 from directions import Direction
-from pipe import Pipe, OccupiedSpaceError
+from pipe import OccupiedSpaceError
 
 
 class PipeElement:
@@ -11,14 +11,15 @@ class PipeElement:
     Basic renderable class.
     '''
 
-    def __init__(self, emj: str, xy: 'tuple[int, int]'):
+    def __init__(self, pipe: 'Pipe', emj: str, xy: 'tuple[int, int]'):
         '''
         Constructor for PipeElement.
         the element is represented with emj glyph and is immediatly placed in xy.
         '''
         self._emj: str = emj
         self._xy: 'tuple[int, int]' = xy
-        Pipe.add(*xy, self)
+        self._pipe = pipe
+        self._pipe.add(*xy, self)
 
     @property
     def aspect(self) -> str:
@@ -29,7 +30,7 @@ class PipeElement:
 
     def delete(self):
         '''Deletes this element from the render pipe.'''
-        return Pipe.delete(*self._xy)
+        return self._pipe.delete(*self._xy)
 
 
 class Avatar(PipeElement):
@@ -37,11 +38,11 @@ class Avatar(PipeElement):
     PipeElement representing the avatar.
     Easier to move around and has default aspect.
     '''
-    def __init__(self, xy: 'tuple[int, int]'):
+    def __init__(self, pipe: 'Pipe', xy: 'tuple[int, int]'):
         '''
         Avatar constructor.
         '''
-        super().__init__(aspects.AVATAR, xy)
+        super().__init__(pipe, aspects.AVATAR, xy)
 
     def move(self, direc: 'Direction') -> bool:
         '''
@@ -61,7 +62,7 @@ class Avatar(PipeElement):
         else:
             raise Exception("argument must be a valid Direction")
         try:
-            Pipe.add(*move_to, self)
+            self._pipe.add(*move_to, self)
             self.delete()
             self._xy = move_to
             return True

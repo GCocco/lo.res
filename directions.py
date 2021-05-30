@@ -1,8 +1,13 @@
+'''
+Just a module containing an enum to ease directions
+'''
 from enum import IntEnum
 
 class Direction(IntEnum):
-    Up = 0
-    Right = 1
-    Down = 2
-    Left = 3
-    pass
+    '''
+    An enumeration of direction as integer
+    '''
+    Up = 1
+    Right = 2
+    Down = 4
+    Left = 8

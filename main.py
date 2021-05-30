@@ -2,6 +2,7 @@
 Main module for setting and input handling
 '''
 from windowhandler import WH
+from pipe import Pipe
 from getch import getch
 
 from pipelements import Avatar, PipeElement
@@ -9,8 +10,10 @@ import aspects
 
 from directions import Direction
 
-AVATAR = Avatar((7, 7))
-PipeElement(aspects.WALL, (7, 6))
+MAP_PIPE = Pipe()
+WH.set_pipe(MAP_PIPE)
+AVATAR = Avatar(MAP_PIPE, (7, 7))
+PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
 
 def input_handler():
     '''
