@@ -2,9 +2,13 @@ from os import popen, system
 from time import sleep
 from threading import Thread
 from pipe import Pipe
+
 import aspects
 
+
 class WH:
+    __COMP = 2
+
     _rows = 0
     _cols = 0
     
@@ -20,7 +24,7 @@ class WH:
     @staticmethod
     def update_size() -> bool:
         sizes = popen("stty size").read().split()
-        sizes = int(sizes[0])-1, int(sizes[1])-1
+        sizes = int(sizes[0])-WH.__COMP, int(sizes[1])-WH.__COMP
         if sizes[0] == WH._rows and sizes[1] == WH._cols:
             return False
         WH._rows = sizes[0]
@@ -30,24 +34,24 @@ class WH:
     @staticmethod
     def update():
         system("clear")
-        print(aspects.Frame*int(WH._cols/2))
-        for i in range(0, WH._rows-3):
+        print(aspects.Frame*int(WH._cols/WH.__COMP))
+        for i in range(0, WH._rows-4):
             row = Pipe.get_row(i)
             WH._printrow(row)
             pass
-        print(aspects.Frame*int(WH._cols/2))
+        print(aspects.Frame*int(WH._cols/WH.__COMP))
         return
 
     @staticmethod
     def _printrow(row):
-        k = 2
+        k = WH.__COMP
         print(aspects.Frame, end='')
         for col in row.keys():
-            if col > WH._cols - 1:
+            if col > WH._cols:
                 break
-            print(aspects.Blank*int((col-k)/2) + row[col], end='')
-            k = col + 2
-        print(aspects.Blank*int((WH._cols-k-2)/2) + aspects.Frame)
+            print(aspects.Blank*int((col-k)/WH.__COMP) + row[col], end='')
+            k = col + WH.__COMP
+        print(aspects.Blank*int((WH._cols-k)/WH.__COMP) + aspects.Frame)
         return
     
     @staticmethod

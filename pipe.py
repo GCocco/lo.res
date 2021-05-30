@@ -10,7 +10,7 @@ class Row(dict):
             super().__init__({args[0]: args[1]})
             pass
         else:
-            raise Exception(f"Invalid arguments for Row {args}")
+            raise Exception("Invalid arguments for Row " + args)
         pass
 
     def pop(self, key: int):
@@ -21,7 +21,7 @@ class Row(dict):
     pass
 
 class Pipe:
-    _rows: dict[int, Row] = dict()
+    _rows = dict()
 
     @staticmethod
     def add(row, col, obj):

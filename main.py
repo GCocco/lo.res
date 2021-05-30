@@ -1,19 +1,28 @@
 from windowhandler import WH
-from threading import Thread
 from getch import getch
-import aspects
 
 
-WH.add(6, 10, aspects.Avatar)
+from pipelements import Avatar
+from directions import Direction
 
-def input_handler_loop():
-    while True:
-        ch = getch()
-        if ch == 'a' or ch == 'A':
-            pass
-        pass
+av = Avatar((7,7))
+
+def input_handler():
+    ch = getch()
+    if ch == 'w' or ch == 'W':
+        av.move(Direction.Up)
+    elif ch == 'd' or ch == 'D':
+        av.move(Direction.Right)
+    elif ch == 's' or ch == 'S':
+        av.move(Direction.Down)
+    elif ch == 'a' or ch == 'A':
+        av.move(Direction.Left)
+    Pipe.update()
     return
 
 if __name__ == "__main__":
     WH.run_loop()
+    while True:
+        input_handler()
+        continue
     pass
