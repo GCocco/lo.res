@@ -11,7 +11,7 @@ class OccupiedSpaceError(Exception):
         Your basic Exception constructor
         '''
         super().__init__(f"{row_col} is occupied by {pipe.get(*row_col)}")
-        self._collided = pipe.get(*row_col)
+        self.collided = pipe.get(*row_col)
 
 
 class Row(dict):
@@ -47,22 +47,22 @@ class Row(dict):
         Overrides dict.pop().
         Doesn't raise KeyError if the key is not in the dictionary
         '''
-
         if key in self:
-            super().pop(key)
+            return super().pop(key)
+        return None
 
 
 class Pipe:
     '''
     An abstraction of the screen matrix, contains the vaious rows.
     '''
-    _rows = dict()
 
     def __init__(self):
         '''
         Pipe constructor
         '''
         self._rows = dict()
+        self._avatar = None
 
     def add(self, row: int, col: int, obj: 'PipeElement'):
         '''
@@ -75,6 +75,20 @@ class Pipe:
             return
         self._rows[row] = Row(col, obj)
 
+    def set_avatar(self, avatar: 'Avatar'):
+        '''
+        Sets the given avatar as the Pipe avatar.
+        Used for printing format
+        '''
+        self._avatar = avatar
+
+    @property
+    def avatar(self) -> 'Avatar':
+        '''
+        Returns the avatar for this pipe, or None if it isn't defined
+        '''
+        return self._avatar
+
     def get(self, row: int, col: int) -> 'union[PipeElement, None]':
         '''
         Returns the PipeElement in the given Slot, None if empty.
@@ -85,7 +99,7 @@ class Pipe:
 
     def get_row(self, row: int) -> 'Row':
         '''
-        returns the Row in given index
+        Returns the Row at given index
         '''
         if row in self._rows:
             return self._rows[row]
@@ -93,7 +107,7 @@ class Pipe:
 
     def delete(self, row: int, col: int) -> 'Row':
         '''
-        Deletes the PipeElement from the given Slot. If the row is emptied, it gets cancelled.
+        Deletes the PipeElement from the given Slot. If the row is emptied, it gets canceled.
         '''
         if row in self._rows:
             self._rows[row].pop(col)

@@ -28,6 +28,18 @@ class PipeElement:
         '''
         return self._emj
 
+    def get_row(self) -> int:
+        '''
+        Returns the Row the element is placed.
+        '''
+        return self._xy[0]
+
+    def get_col(self) -> int:
+        '''
+        Returns the column the element is placed.
+        '''
+        return self._xy[1]
+
     def delete(self):
         '''Deletes this element from the render pipe.'''
         return self._pipe.delete(*self._xy)
@@ -43,6 +55,7 @@ class Avatar(PipeElement):
         Avatar constructor.
         '''
         super().__init__(pipe, aspects.AVATAR, xy)
+        pipe.set_avatar(self)
 
     def move(self, direc: 'Direction') -> bool:
         '''
