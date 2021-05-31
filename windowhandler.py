@@ -43,12 +43,12 @@ class WH:
         Flushes and prints the pipe.
         '''
         if WH._current_pipe.avatar:
-            row_offset = WH._current_pipe.avatar.get_row() - int(WH._rows/2)
+            row_offset = WH._current_pipe.avatar.row - int((WH._rows-4)/2)
         else:
             row_offset = 0
         system("clear")
         if WH._current_pipe.avatar:
-            print("#debug", WH._current_pipe.avatar.get_col()-int(WH._cols/2)) # DEBUG
+            print("#debug", WH._current_pipe.avatar.col - int(WH._cols/2)) # DEBUG
         else:
             print("#debug: no avatar") # DEBUG
         print(aspects.FRAME*WH._cols)
@@ -64,7 +64,7 @@ class WH:
         '''
         offset: int = 0
         if WH._current_pipe.avatar:
-            offset = WH._current_pipe.avatar.get_col() - int(WH._cols/2)
+            offset = WH._current_pipe.avatar.col - int(WH._cols/2)
 
         k = 2 + offset
         print(aspects.FRAME, end='')

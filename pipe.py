@@ -2,17 +2,8 @@
 Here are defined Classes to easy handle the screen printing.
 '''
 
-class OccupiedSpaceError(Exception):
-    '''
-    Exception raised when attempting to place a PipeElement in an already occupied slot.
-    '''
-    def __init__(self, pipe: 'Pipe', row_col):
-        '''
-        Your basic Exception constructor
-        '''
-        super().__init__(f"{row_col} is occupied by {pipe.get(*row_col)}")
-        self.collided = pipe.get(*row_col)
-
+from pipelements import from_string
+from exceptions import OccupiedSpaceError
 
 class Row(dict):
     '''
@@ -64,16 +55,16 @@ class Pipe:
         self._rows = dict()
         self._avatar = None
 
-    def add(self, row: int, col: int, obj: 'PipeElement'):
+    def add(self, obj: 'PipeElement'):
         '''
         Adds a PipeElement in the row,col slot
         '''
-        if row in self._rows:
-            if self._rows[row].get(col):
-                raise OccupiedSpaceError(self, (row, col))
-            self._rows[row][col] = obj
+        if obj.row in self._rows:
+            if self._rows[obj.row].get(obj.col):
+                raise OccupiedSpaceError(self, obj.row, obj.col)
+            self._rows[obj.row][obj.col] = obj
             return
-        self._rows[row] = Row(col, obj)
+        self._rows[obj.row] = Row(obj.col, obj)
 
     def set_avatar(self, avatar: 'Avatar'):
         '''
@@ -115,3 +106,21 @@ class Pipe:
                 self._rows.pop(row)
             return Row()
         return None
+
+    @staticmethod
+    def fromlist(pipe_list):
+        '''
+        constructs and returns a pipe with given list of PipeElements given as list
+        '''
+        new_pipe = Pipe()
+        for lmnt in pipe_list:
+            from_string(lmnt[0])(new_pipe, lmnt[1])
+        return new_pipe
+
+
+# TODO: implementare una funzione che costruisca a partire da una serie json la Pipe desiderata
+'''
+la forma del json sarà del tipo
+list[(str, (int, int))] dove (int,int)sono le coordinate dello slot,
+str il nome del PipeElement o in alternativa la sua rappresentazione 
+'''

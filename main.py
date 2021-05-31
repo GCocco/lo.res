@@ -13,7 +13,7 @@ from directions import Direction
 MAP_PIPE = Pipe()
 WH.set_pipe(MAP_PIPE)
 AVATAR = Avatar(MAP_PIPE, (7, 7))
-PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
+PipeElement(MAP_PIPE, aspects.TREE, (7, 6))
 
 def input_handler():
     '''

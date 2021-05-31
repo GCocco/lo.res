@@ -3,7 +3,7 @@ This module contains pipe-renderable classes.
 '''
 import aspects
 from directions import Direction
-from pipe import OccupiedSpaceError
+from exceptions import OccupiedSpaceError
 
 
 class PipeElement:
@@ -19,7 +19,7 @@ class PipeElement:
         self._emj: str = emj
         self._xy: 'tuple[int, int]' = xy
         self._pipe = pipe
-        self._pipe.add(*xy, self)
+        self._pipe.add(self)
 
     @property
     def aspect(self) -> str:
@@ -28,13 +28,15 @@ class PipeElement:
         '''
         return self._emj
 
-    def get_row(self) -> int:
+    @property
+    def row(self) -> int:
         '''
         Returns the Row the element is placed.
         '''
         return self._xy[0]
 
-    def get_col(self) -> int:
+    @property
+    def col(self) -> int:
         '''
         Returns the column the element is placed.
         '''
@@ -74,10 +76,19 @@ class Avatar(PipeElement):
             move_to = self._xy[0], self._xy[1] - 1
         else:
             raise Exception("argument must be a valid Direction")
+
+        backup_pos = self._xy
         try:
-            self._pipe.add(*move_to, self)
-            self.delete()
             self._xy = move_to
+            self._pipe.add(self)
+            self._pipe.delete(*backup_pos)
             return True
         except OccupiedSpaceError:
+            self._xy = backup_pos
             return False
+
+
+def from_string(name: str):
+    return {
+        'Avatar': Avatar,
+        }.get(name, lambda pipe, coord: PipeElement(pipe, name, coord))
