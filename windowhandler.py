@@ -48,7 +48,7 @@ class WH:
             row_offset = 0
         system("clear")
         if WH._current_pipe.avatar:
-            print("#debug", WH._current_pipe.avatar.get_row(), WH._current_pipe.avatar.get_col()) # DEBUG
+            print("#debug", WH._current_pipe.avatar.get_col()-int(WH._cols/2)) # DEBUG
         else:
             print("#debug: no avatar") # DEBUG
         print(aspects.FRAME*WH._cols)
@@ -62,16 +62,20 @@ class WH:
         '''
         Prints a single Pipe Row.
         '''
-        k = 2
+        offset: int = 0
+        if WH._current_pipe.avatar:
+            offset = WH._current_pipe.avatar.get_col() - int(WH._cols/2)
+
+        k = 2 + offset
         print(aspects.FRAME, end='')
         for col in row.keys():
-            if col >= WH._cols:
+            if col >= WH._cols + offset:
                 break
-            if col <= 1:
+            if col <= offset + 1:
                 continue
             print(aspects.BLANK * (col-k) + row[col].aspect, end='')
             k = col + 1
-        print(aspects.BLANK * (WH._cols-k) + aspects.FRAME)
+        print(aspects.BLANK * ((WH._cols+offset)-k) + aspects.FRAME)
 
     @staticmethod
     def _win_manager_loop():
