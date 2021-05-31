@@ -65,7 +65,7 @@ class WH:
         k = 2
         print(aspects.FRAME, end='')
         for col in row.keys():
-            if col > WH._cols:
+            if col >= WH._cols:
                 break
             if col <= 1:
                 continue
