@@ -2,8 +2,9 @@
 Here are defined Classes to easy handle the screen printing.
 '''
 
-from pipelements import from_string
 from exceptions import OccupiedSpaceError
+from json import load, dump
+from pipelements import from_string
 
 class Row(dict):
     '''
@@ -117,10 +118,31 @@ class Pipe:
             from_string(lmnt[0])(new_pipe, lmnt[1])
         return new_pipe
 
+    def as_list(self):
+        '''
+        Returns the pipe as a list of pipelements as tuples
+        '''
+        pipe_list = []
+        for row in self._rows:
+            for col in self._rows[row]:
+                pipe_list.append(self._rows[row][col].as_tuple())
+        return pipe_list
 
-# TODO: implementare una funzione che costruisca a partire da una serie json la Pipe desiderata
-'''
-la forma del json sarà del tipo
-list[(str, (int, int))] dove (int,int)sono le coordinate dello slot,
-str il nome del PipeElement o in alternativa la sua rappresentazione 
-'''
+    def dump(self, filename: str):
+        '''
+        Saves the pipe as a json file.
+        If the given file already exists, is overwritten.
+        '''
+        file_pointer = open(filename, "w")
+        dump(self.as_list(), file_pointer)
+        file_pointer.close()
+
+    @staticmethod
+    def load(filename) -> 'Pipe':
+        '''
+        Loads a saved pipe from given file.
+        '''
+        file_pointer = open(filename, "r")
+        new_pipe = Pipe.fromlist(load(file_pointer))
+        file_pointer.close()
+        return new_pipe

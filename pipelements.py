@@ -1,10 +1,9 @@
 '''
 This module contains pipe-renderable classes.
 '''
-import aspects
-from directions import Direction
 from exceptions import OccupiedSpaceError
-
+from directions import Direction
+import aspects
 
 class PipeElement:
     '''
@@ -20,6 +19,12 @@ class PipeElement:
         self._xy: 'tuple[int, int]' = xy
         self._pipe = pipe
         self._pipe.add(self)
+
+    def as_tuple(self) -> str:
+        '''
+        Returns the Pipelement as a json-compatibile tuple
+        '''
+        return (self._emj, self._xy)
 
     @property
     def aspect(self) -> str:
@@ -87,8 +92,16 @@ class Avatar(PipeElement):
             self._xy = backup_pos
             return False
 
+    def as_tuple(self):
+        '''
+        Returns the element as a json-compatible tuple
+        '''
+        return ('Avatar', self._xy)
 
 def from_string(name: str):
+    '''
+    Returns a PipeElement Constructor based on the given string
+    '''
     return {
         'Avatar': Avatar,
         }.get(name, lambda pipe, coord: PipeElement(pipe, name, coord))
