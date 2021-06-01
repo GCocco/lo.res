@@ -20,7 +20,8 @@ pipelements.Tree(MAP_PIPE, (8, 7))
 pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
 
 TreeBox(MAP_PIPE, (10, 10))
-
+TEST_INTERACTABLE = pipelements.Interactable(MAP_PIPE, aspects.SKULL, (4, 4))
+TEST_INTERACTABLE.set_function(TEST_INTERACTABLE.delete)
 # end DEBUG/TEST stuff
 
 def input_handler():

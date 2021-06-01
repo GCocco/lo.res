@@ -86,7 +86,7 @@ class Pipe:
         Returns the PipeElement in the given Slot, None if empty.
         '''
         if row in self._rows:
-            return self._rows.get(col)
+            return self._rows[row].get(col)
         return None
 
     def get_row(self, row: int) -> 'Row':

@@ -26,6 +26,14 @@ class PipeElement:
         '''
         return (self._emj, self._xy)
 
+    def update(self):
+        '''
+        Removes and adds again the element to the pipe.
+        Used to update the pipe since adding the element in the init superclass may cause troubles
+        '''
+        self.delete()
+        self._pipe.add(self)
+
     @property
     def aspect(self) -> str:
         '''
@@ -63,6 +71,60 @@ class Tree(PipeElement):
         super().__init__(pipe, aspects.TREE, xy)
 
 
+class Interactable(PipeElement):
+    '''
+    An Interactable PipeElement.
+    Interaction is launched by the avatar stepping on it's slot
+    '''
+    def __init__(self, pipe: 'Pipe',
+                 lmnt_aspect: str,
+                 pos: 'tuple[int, int]',
+                 function=None, args=None):
+        '''
+        base Constructor.
+        '''
+        super().__init__(pipe, lmnt_aspect, pos)
+        self._interact_func = function
+        if self._interact_func is None:
+            self._interact_func = self._voidfunc
+        self._arguments = args
+        self.update()
+
+    def set_function(self, interact_func, args=None):
+        '''
+        Sets the given function as the function called when interaction is launched
+        '''
+        self._interact_func = interact_func
+        self._arguments = args
+
+    def set_args(self, args):
+        '''
+        Sets the given arguments to be used when interaction is called.
+        '''
+        self._arguments = args
+
+    @property
+    def args(self):
+        '''
+        Returns the arguments setted for this instance.
+        '''
+        return self._arguments
+
+    def __call__(self):
+        '''
+        Interface used when interacting with this element
+        '''
+        if self._arguments:
+            return self._interact_func(*self._arguments)
+        return self._interact_func()
+
+    @staticmethod
+    def _voidfunc(*args):
+        '''
+        Blank default func.
+        '''
+        return args
+
 class Avatar(PipeElement):
     '''
     PipeElement representing the avatar.
@@ -99,7 +161,10 @@ class Avatar(PipeElement):
             self._pipe.add(self)
             self._pipe.delete(*backup_pos)
             return True
-        except OccupiedSpaceError:
+        except OccupiedSpaceError as occupied:
+            lmnt = occupied.lmnt
+            if isinstance(lmnt, Interactable):
+                lmnt()
             self._xy = backup_pos
             return False
 
