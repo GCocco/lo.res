@@ -52,6 +52,17 @@ class PipeElement:
         return self._pipe.delete(*self._xy)
 
 
+class Tree(PipeElement):
+    '''
+    A tree. just a PipeElement with predefined aspect.
+    '''
+    def __init__(self, pipe, xy):
+        '''
+        Basic constructor.
+        '''
+        super().__init__(pipe, aspects.TREE, xy)
+
+
 class Avatar(PipeElement):
     '''
     PipeElement representing the avatar.
@@ -104,4 +115,5 @@ def from_string(name: str):
     '''
     return {
         'Avatar': Avatar,
+        'Tree': Tree,
         }.get(name, lambda pipe, coord: PipeElement(pipe, name, coord))

@@ -5,15 +5,23 @@ from windowhandler import WH
 from pipe import Pipe
 from getch import getch
 
-from pipelements import Avatar, PipeElement
+import pipelements
 import aspects
 
 from directions import Direction
+from structures import TreeBox
 
+# DEBUG/TEST stuff
 MAP_PIPE = Pipe()
 WH.set_pipe(MAP_PIPE)
-AVATAR = Avatar(MAP_PIPE, (7, 7))
-PipeElement(MAP_PIPE, aspects.TREE, (7, 6))
+AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
+pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
+pipelements.Tree(MAP_PIPE, (8, 7))
+pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
+
+TreeBox(MAP_PIPE, (10, 10))
+
+# end DEBUG/TEST stuff
 
 def input_handler():
     '''
