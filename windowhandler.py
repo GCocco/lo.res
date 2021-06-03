@@ -42,20 +42,9 @@ class WH:
         '''
         Flushes and prints the pipe.
         '''
-        if WH._current_pipe.avatar:
-            row_offset = WH._current_pipe.avatar.row - int((WH._rows-4)/2)
-        else:
-            row_offset = 0
         system("clear")
-        if WH._current_pipe.avatar:
-            print("#debug", WH._current_pipe.avatar.col - int(WH._cols/2)) # DEBUG
-        else:
-            print("#debug: no avatar") # DEBUG
-        print(aspects.FRAME*WH._cols)
-        for i in range(0, WH._rows-4):
-            row = WH._current_pipe.get_row(i+row_offset)
-            WH._printrow(row)
-        print(aspects.FRAME*WH._cols)
+
+        WH._current_pipe.print((WH._rows-4, WH._cols))
 
     @staticmethod
     def _printrow(row: 'pipe.Row'):

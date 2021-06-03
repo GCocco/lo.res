@@ -5,6 +5,7 @@ Here are defined Classes to easy handle the screen printing.
 from exceptions import OccupiedSpaceError
 from json import load, dump
 from pipelements import from_string
+from aspects import BLANK, FRAME
 
 class Row(dict):
     '''
@@ -25,6 +26,21 @@ class Row(dict):
             super().__init__({args[0]: args[1]})
         else:
             raise Exception("Invalid arguments for Row " + args)
+
+    def print(self, term_col: int, from_col: int):
+        '''
+        Prints the content of the row, starting from 'from_col' in a terminal of 'term_col' columns
+        '''
+        print(FRAME, end='')
+        k = from_col + 2
+        for lmnt_col in self.keys():
+            if lmnt_col <= from_col + 1:
+                continue
+            if lmnt_col >= from_col+term_col:
+                break
+            print(BLANK*(lmnt_col-k) + self[lmnt_col].aspect, end='')
+            k = lmnt_col + 1
+        print(BLANK*((from_col+term_col)-k) + FRAME)
 
     def keys(self) -> 'list[int]':
         '''
@@ -55,6 +71,16 @@ class Pipe:
         '''
         self._rows = dict()
         self._avatar = None
+
+    def print(self, term_sizes, from_row=0, from_col=0):
+        '''
+        Prints the pipe content inside the rect 'term_sizes',
+        placed in the from_row, crom_col slot.
+        '''
+        print(FRAME*term_sizes[1])
+        for row_index in range(from_row, from_row + term_sizes[0]):
+            self.get_row(row_index).print(term_sizes[1], from_col)
+        print(FRAME*term_sizes[1])
 
     def add(self, obj: 'PipeElement'):
         '''
