@@ -9,7 +9,9 @@ import pipelements
 import aspects
 
 from directions import Direction
-from structures import TreeBox
+from structures import PipeTreeBox, PipeText
+from time import sleep
+from threading import Thread
 
 # DEBUG/TEST stuff
 MAP_PIPE = MapPipe()
@@ -19,10 +21,12 @@ pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
 pipelements.Tree(MAP_PIPE, (8, 7))
 pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
 
-TreeBox(MAP_PIPE, (10, 10))
+PipeTreeBox(MAP_PIPE, (10, 10))
+PipeText(MAP_PIPE, (-1, -1), 'Test text on map')
 TEST_INTERACTABLE = pipelements.Interactable(MAP_PIPE, aspects.SKULL, (4, 4))
 TEST_INTERACTABLE.set_function(TEST_INTERACTABLE.delete)
 # end DEBUG/TEST stuff
+
 
 def input_handler():
     '''
@@ -38,6 +42,7 @@ def input_handler():
     elif ch_input in ('a', 'A'):
         AVATAR.move(Direction.Left)
     WH.update()
+
 
 if __name__ == "__main__":
     UPDATE_THREAD = WH.run_loop()

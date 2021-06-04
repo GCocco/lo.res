@@ -3,8 +3,9 @@ Contains the class handling printing and size changes on terminal
 '''
 from os import popen, system
 from time import sleep
-from threading import Thread
+from threading import Thread, Semaphore
 import aspects
+from exceptions import PrioritySignal
 
 
 class WH:
@@ -20,6 +21,7 @@ class WH:
         '''
         Sets the given pipe as the one to be rendered and updated
         '''
+        WH.sem = Semaphore()
         WH._current_pipe = r_pipe
         WH.update_size()
         WH.update()
@@ -43,8 +45,9 @@ class WH:
         Flushes and prints the pipe.
         '''
         system("clear")
-
+        WH.sem.acquire()
         WH._current_pipe.print((WH._rows-4, WH._cols))
+        WH.sem.release()
 
     @staticmethod
     def _printrow(row: 'pipe.Row'):
@@ -72,8 +75,7 @@ class WH:
         The loop function handling size changes of the terminal
         '''
         while True:
-            if WH.update_size():
-                WH.update()
+            WH.update_size()
             sleep(2)
 
     @staticmethod

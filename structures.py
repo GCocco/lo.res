@@ -50,13 +50,30 @@ class PipeElementStruct:
         return self._elements
 
 
-class TreeBox(PipeElementStruct):
+class PipeTreeBox(PipeElementStruct):
     '''
     A test structure defining a box of trees opened at the top
     '''
     def __init__(self, pipe, pos):
+        '''
+        Base Constructor.
+        '''
         super().__init__(pipe, pos, [['Tree', 'Tree', None, 'Tree', 'Tree'],
                                      ['Tree', None, None, None, 'Tree'],
                                      ['Tree', None, None, None, 'Tree'],
                                      ['Tree', None, None, None, 'Tree'],
                                      ['Tree', 'Tree', 'Tree', 'Tree', 'Tree']])
+
+
+class PipeText(PipeElementStruct):
+    '''
+    A String that can be easily added to the pipe as such.
+    '''
+    def __init__(self, pipe, pos, text: str):
+        '''
+        Base constructor, takes the standards PipeElement arguments + the string
+        '''
+        charlist = [text[i: i+2] for i in range(0, len(text), 2)]
+        if len(charlist[len(charlist)-1]) == 1:
+            charlist[len(charlist)-1] += ' '
+        super().__init__(pipe, pos, [charlist])
