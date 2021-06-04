@@ -65,10 +65,11 @@ class Pipe:
     An abstraction of the screen matrix, contains the vaious rows.
     '''
 
-    def __init__(self):
+    def __init__(self, row_class: 'class' = Row):
         '''
         Pipe constructor
         '''
+        self._row_class = row_class
         self._rows = dict()
         self._avatar = None
 
@@ -91,7 +92,7 @@ class Pipe:
                 raise OccupiedSpaceError(self, obj.row, obj.col)
             self._rows[obj.row][obj.col] = obj
             return
-        self._rows[obj.row] = Row(obj.col, obj)
+        self._rows[obj.row] = self._row_class(obj.col, obj)
 
     def set_avatar(self, avatar: 'Avatar'):
         '''
@@ -121,7 +122,7 @@ class Pipe:
         '''
         if row in self._rows:
             return self._rows[row]
-        return Row()
+        return self._row_class()
 
     def delete(self, row: int, col: int) -> 'Row':
         '''
@@ -131,7 +132,7 @@ class Pipe:
             self._rows[row].pop(col)
             if len(self._rows[row]) == 0:
                 self._rows.pop(row)
-            return Row()
+            return None
         return None
 
     @staticmethod
@@ -172,3 +173,23 @@ class Pipe:
         new_pipe = Pipe.fromlist(load(file_pointer))
         file_pointer.close()
         return new_pipe
+
+
+class MapPipe(Pipe):
+    '''
+    A normal Pipe, but when printed the cursor/avatar is keeped at center.
+    '''
+    def __init__(self):
+        '''
+        Constructor
+        '''
+        super().__init__()
+
+    def print(self, term_sizes: 'tuple[int, int]', from_row=0, from_col=0):
+        '''
+        Calls super method print with different arguments.
+        '''
+        if self._avatar:
+            from_row = (from_row + self._avatar.row) - int(term_sizes[0]/2)
+            from_col = (from_col + self._avatar.col) - int(term_sizes[1]/2)
+        super().print(term_sizes, from_row, from_col)

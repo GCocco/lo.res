@@ -2,7 +2,7 @@
 Main module for setting and input handling
 '''
 from windowhandler import WH
-from pipe import Pipe
+from pipe import MapPipe
 from getch import getch
 
 import pipelements
@@ -12,7 +12,7 @@ from directions import Direction
 from structures import TreeBox
 
 # DEBUG/TEST stuff
-MAP_PIPE = Pipe()
+MAP_PIPE = MapPipe()
 WH.set_pipe(MAP_PIPE)
 AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
 pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
