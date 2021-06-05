@@ -5,7 +5,6 @@ from os import popen, system
 from time import sleep
 from threading import Thread, Semaphore
 import aspects
-from exceptions import PrioritySignal
 
 
 class WH:
@@ -15,6 +14,7 @@ class WH:
     _rows = 0
     _cols = 0
     _current_pipe = None
+    update_flag = False
 
     @staticmethod
     def set_pipe(r_pipe: 'Pipe'):
@@ -44,10 +44,9 @@ class WH:
         '''
         Flushes and prints the pipe.
         '''
+        WH.update_flag = False
         system("clear")
-        WH.sem.acquire()
         WH._current_pipe.print((WH._rows-4, WH._cols))
-        WH.sem.release()
 
     @staticmethod
     def _printrow(row: 'pipe.Row'):
@@ -75,7 +74,8 @@ class WH:
         The loop function handling size changes of the terminal
         '''
         while True:
-            WH.update_size()
+            if WH.update_size():
+                WH.update_flag = True
             sleep(2)
 
     @staticmethod

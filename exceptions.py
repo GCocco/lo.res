@@ -14,9 +14,9 @@ class OccupiedSpaceError(Exception):
         self.lmnt = pipe.get(row, col)
 
 
-class PrioritySignal(Exception):
+class GetchInterrupt(Exception):
     '''
-    An exception to be used for interrupting a blocking call such as getch()
+    An exception to be used for interrupting a blocking getch()
     '''
     def __init__(self):
         '''

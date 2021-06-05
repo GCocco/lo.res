@@ -7,11 +7,13 @@ from getch import getch
 
 import pipelements
 import aspects
+import signal
 
 from directions import Direction
 from structures import PipeTreeBox, PipeText
 from time import sleep
 from threading import Thread
+from exceptions import GetchInterrupt
 
 # DEBUG/TEST stuff
 MAP_PIPE = MapPipe()
@@ -32,7 +34,17 @@ def input_handler():
     '''
     waits for a input and processes it
     '''
-    ch_input: str = getch()
+
+    def interrupt_func(signum, frame):
+        raise GetchInterrupt()
+
+    signal.signal(signal.SIGALRM, interrupt_func)
+    signal.alarm(3)
+    try:
+        ch_input: str = getch()
+    except OverflowError:
+        return
+    signal.alarm(0)
     if ch_input in ('w', 'W'):
         AVATAR.move(Direction.Up)
     elif ch_input in ('d', 'D'):
@@ -41,11 +53,17 @@ def input_handler():
         AVATAR.move(Direction.Down)
     elif ch_input in ('a', 'A'):
         AVATAR.move(Direction.Left)
+    elif ch_input == 'Q':
+        exit()
     WH.update()
 
 
 if __name__ == "__main__":
     UPDATE_THREAD = WH.run_loop()
     while True:
-        input_handler()
-        continue
+        try:
+            input_handler()
+            continue
+        except GetchInterrupt:
+            WH.update()
+            
