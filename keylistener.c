@@ -5,6 +5,8 @@
 #include <termios.h>
 
 #define NULLCHAR '\''
+
+
 static struct termios old, current;
 
 /* Initializza terminale */
@@ -23,69 +25,64 @@ void resetTermios(void)
   tcsetattr(0, TCSANOW, &old);
 }
 
-/* Read 1 character */
-char getch_() 
-{
+typedef struct{
+  pthread_t thread;
+  char* c;
+  int wait;
+}Thread;
+
+
+char getch_(Thread* t){
   char ch;
-  initTermios();
-  ch = getchar();
-  resetTermios();
+  ch = *t->c;
+  printf("retrieving scanned char %c, %c \n", *t->c, ch);
+  t->wait = 0;
   return ch;
 }
 
 
-char* getCharPointer(){
-  return (char*) malloc(sizeof(char));
-}
-
-void freePointer(char* pt){
-  free(pt);
-}
-
-typedef struct{
-  int flag;
-  pthread_t thread;
-  char* ptr;
-}Thread;
-
-
 void* scanner_func(void* tp){
   Thread* t = (Thread*) tp;
-  while(t->flag){
-    *t->ptr = NULLCHAR;
-    *t->ptr = getch_();
-    sleep(1);
+  initTermios();
+  
+  while(1){
+    t->wait = 1;
+    printf("scanning...\b");
+    *t->c = NULLCHAR;
+    *t->c = getchar();
+    printf("scanned %c, waiting...\n",*t->c);
+    while(t->wait){usleep(200000);}
   }
   return NULL;
 }
 
 
-Thread* run_scan(char* pter){
+Thread* run_scan(){
   Thread* t = malloc(sizeof(Thread));
-  t->ptr = pter;
-  t->flag = 1; 
-  
-  pthread_create(&t->thread, NULL, &scanner_func, t);
-  
+  t->c = malloc(sizeof(char));
+  pthread_create(&t->thread, NULL, &scanner_func, t);  
   return t;
 }
 
 void killThread(Thread* t){
-  t->flag = 0;
-  pthread_join(t->thread, NULL);
+  pthread_kill(t->thread, 0);
+  //pthread_join(t->thread, NULL);
+  free(t->c);
   free(t);
+  resetTermios();
   return;
 }
 
 
 int main(){
-  char c = 'c';
   Thread* t;
+  char ch = ' ';
+  t = run_scan();
   
-  t = run_scan(&c);
-
-  while (c!='q'){
-    printf("%c\n", c);
+  while (ch!='Q'){
+    ch = getch_(t);
+    printf("%c\n", ch);
+    sleep(2);
   }
 
   killThread(t);
