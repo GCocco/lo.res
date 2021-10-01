@@ -8,6 +8,9 @@ from structures import PipeText
 from pipelements import PipeElement
 import aspects
 
+
+
+
 class Cursor(PipeElement):
     '''
     A PipeElement used to navigate a DialogPipe
@@ -17,12 +20,35 @@ class Cursor(PipeElement):
         assert isinstance(pipe, DialogPipe)
         if asp is None:
             asp = aspects.DIALOG_CURSOR
-        super().__init__(pipe, asp, (-1,0))
+        super().__init__(pipe, asp, (0,0))
 
     def move(self, direct: 'Direction') -> bool:
-        # TODO implement
-        pass
+        if direct == Direction.Up:
+            if self._xy[0] == 0:
+                return False
+            self._xy[0]-=1
+            return True
+        elif direct ==Direction.Down:
+            if self._xy[0] == len(self._pipe._rows9 -1):
+                return False
+            self._xy[0] += 1
+            return True
+        else:
+            # TODO implement opt navigation
+            return False
+        return False
 
+    '''
+    When called, interacts with the option pointed
+    '''
+    def __call__(self):
+       print(self._pipe.get(*self._xy))
+       return
+    pass
+
+"""
+TODO LATER
+    
 class ButtonElement(PipeElement):
     '''
     A "button" that can be hovered by the cursor.
@@ -77,7 +103,6 @@ class PipeTextOption(PipeText):
         super().__init__(pipe,
                          (pos[0], pos[1] + 2),
                          text)
-        
         self._checked = checked
             
     def toggle(self):
@@ -87,26 +112,17 @@ class PipeTextOption(PipeText):
         self._checked = not self._checked
         if self._checked:
             self._opt = 
-            
+
+"""            
 
 class DialogPipe(Pipe):
     '''
     DialogPipe class.
     '''
-    def __init__(self):
-        self._cursor = Cursor(self) 
+    def __init__(self, str: dialog_txt, *args):
+        self._cursor = Cursor(self)
+        PipeText(self, (0, 0), dialog_text)
+        for opt in args:
+            #TODO: add options to pipe
         pass
 
-    def addText(self, text: str, pos=(None, None)):
-        '''
-        Adds a text to the pipe.
-        '''
-        if not pos[0]:
-            rows = list(self._rows.keys())
-            rows.sort()
-            pos[0] = rows[len(rows)-1] + 1
-        if not pos[1]:
-            if pos[0] in self._rows:
-                cols = self._rows[pos[0]].keys()
-                pos[1] = cols[len(cols)-1] + 2
-        PipeText(self, pos, text)
