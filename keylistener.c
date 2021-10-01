@@ -2,7 +2,36 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <termios.h>
+
 #define NULLCHAR '\''
+static struct termios old, current;
+
+/* Initializza terminale */
+void initTermios() 
+{
+  tcgetattr(0, &old); /* grab old terminal i/o settings */
+  current = old; /* make new settings same as old settings */
+  current.c_lflag &= ~ICANON; /* disable buffered i/o */
+  current.c_lflag &= ~ECHO; /* set no echo mode */
+  tcsetattr(0, TCSANOW, &current); /* use these new terminal i/o settings now */
+}
+
+/* Restore old terminal i/o settings */
+void resetTermios(void) 
+{
+  tcsetattr(0, TCSANOW, &old);
+}
+
+/* Read 1 character */
+char getch_() 
+{
+  char ch;
+  initTermios();
+  ch = getchar();
+  resetTermios();
+  return ch;
+}
 
 
 char* getCharPointer(){
@@ -24,7 +53,7 @@ void* scanner_func(void* tp){
   Thread* t = (Thread*) tp;
   while(t->flag){
     *t->ptr = NULLCHAR;
-    *t->ptr = getchar();
+    *t->ptr = getch_();
     sleep(1);
   }
   return NULL;
@@ -52,7 +81,7 @@ void killThread(Thread* t){
 int main(){
   char c = 'c';
   Thread* t;
-
+  
   t = run_scan(&c);
 
   while (c!='q'){
