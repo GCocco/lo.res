@@ -82,7 +82,7 @@ int main(){
   while (ch!='Q'){
     ch = getch_(t);
     printf("%c\n", ch);
-    sleep(2);
+    sleep(1);
   }
 
   killThread(t);

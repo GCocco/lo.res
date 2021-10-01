@@ -174,6 +174,11 @@ class Pipe:
         file_pointer.close()
         return new_pipe
 
+    @property
+    def rows(self):
+        return self._rows
+    
+
 
 class MapPipe(Pipe):
     '''

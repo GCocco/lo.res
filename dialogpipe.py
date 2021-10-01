@@ -46,54 +46,70 @@ class Cursor(PipeElement):
        return
     pass
 
+
+class DialogButton(PipeElement):
+    '''
+    A "button" to be attached to a text label to display an option
+    '''
+    def __init__(self, pipe, text=None, command=None, index=None, *args, **kwargs):
+        self._normal = aspects.DIALOG_BUTTON
+        self._hover = aspects.DIALOG_BUTTON_HOVERED
+        if command:
+            self._command = command
+            pass
+
+        self._args = args
+        
+        if "normal" in kwargs:
+            self._normal = kwargs["normal"]
+            kwargs.pop("normal")
+            pass
+        if "hover" in kwargs:
+            self._normal = kwargs["hover"]
+            kwargs.pop("hover")
+            pass
+
+        self._kwargs = kwargs
+
+        if index == None:
+            i = len(pipe.rows)
+            PipeElement(self, pipe, self._normal, (i, 0))
+            if text:
+                PipeText(pipe, (i, 1), text)
+                pass
+        else:
+            PipeElement(self, pipe, self._normal, (index, 0))
+            if text:
+                PipeText(pipe, (index, 1), text)
+                pass
+            pass
+        pass
+    
+    def setCommand(self, command):
+        self._command = command
+        return
+
+    def setArgs(self, *args, append=False, **kwargs):
+        if append:
+            self._args += args
+            self._kwargs.update(kwargs)
+            return
+        self._args = args
+        self._kwargs = kwargs
+        return
+    
+    def __call__(self):
+        self._command(*args, **kwargs)
+        pass
+    pass
+
+
+            
+
+        
 """
 TODO LATER
     
-class ButtonElement(PipeElement):
-    '''
-    A "button" that can be hovered by the cursor.
-    It can execute a command when "hovered", when "unhovered"
-    and when a button is pressed during hover'''
-    def __init__(self, pipe, pos, command, *args, **kwargs):
-        '''
-        Base constructor.
-        '''
-        self._custom_normal = None
-        self._custom_hover = None
-        if "normal" in kwargs:
-            self._custom_normal = kwargs["normal"]
-        if "hover" in kwargs:
-            self._custom_hover = kwargs["hover"]
-
-        self._command = command
-        self._args = args
-        if self._custom_normal:
-            super().__init__(pipe, self._custom_normal, pos)
-        else:
-            super().__init__(pipe, aspects.BUTTON, pos)
-        self.update()
-
-    def change_command(self, command, *args):
-        '''
-        Changes the command for this button.
-        '''
-        self._command = command
-        if args:
-            self._args = args
-
-    def change_args(self, *args):
-        '''
-        Changes the args used when button is pressed
-        '''
-        self._args = args
-
-    def __call__(self. *args):
-        '''
-        Calls the command. if arguments are given,
-        they are added to the ones previously setted
-        '''
-        self._command(*(self._args+args))
-
 class PipeTextOption(PipeText):
     '''
     An option described by a text
@@ -124,5 +140,6 @@ class DialogPipe(Pipe):
         PipeText(self, (0, 0), dialog_text)
         for opt in args:
             #TODO: add options to pipe
+            pass
         pass
-
+    
