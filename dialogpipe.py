@@ -5,10 +5,8 @@ A specific pipe to be used to simplify text dialogs
 from pipe import Pipe
 from directions import Direction
 from structures import PipeText
-from pipelements import PipeElement
+from pipelements import PipeElement, Interactable
 import aspects
-
-
 
 
 class Cursor(PipeElement):
@@ -20,18 +18,18 @@ class Cursor(PipeElement):
         assert isinstance(pipe, DialogPipe)
         if asp is None:
             asp = aspects.DIALOG_CURSOR
-        super().__init__(pipe, asp, (0,0))
+        super().__init__(pipe, asp, (0,-1))
 
     def move(self, direct: 'Direction') -> bool:
         if direct == Direction.Up:
             if self._xy[0] == 0:
                 return False
-            self._xy[0]-=1
+            self._xy = (self._xy[0]-1, self._xy[1])
             return True
-        elif direct ==Direction.Down:
-            if self._xy[0] == len(self._pipe._rows9 -1):
+        elif direct==Direction.Down:
+            if self._xy[0] == len(self._pipe._rows) -1:
                 return False
-            self._xy[0] += 1
+            self._xy = (self._xy[0] + 1, self._xy[1])
             return True
         else:
             # TODO implement opt navigation
@@ -73,17 +71,21 @@ class DialogButton(PipeElement):
 
         if index == None:
             i = len(pipe.rows)
-            PipeElement(self, pipe, self._normal, (i, 0))
+            PipeElement.__init__(self, pipe, self._normal, (i, 0))
             if text:
                 PipeText(pipe, (i, 1), text)
                 pass
         else:
-            PipeElement(self, pipe, self._normal, (index, 0))
+            PipeElement._init__(self, pipe, self._normal, (index, 0))
             if text:
                 PipeText(pipe, (index, 1), text)
                 pass
             pass
         pass
+
+    def hover(self, val: bool):
+        self._aspect = {True: self._hover, False: self._normal}[val]
+        return
     
     def setCommand(self, command):
         self._command = command
@@ -103,43 +105,38 @@ class DialogButton(PipeElement):
         pass
     pass
 
-
-            
-
-        
-"""
-TODO LATER
-    
-class PipeTextOption(PipeText):
-    '''
-    An option described by a text
-    '''
-    def __init__(self, pipe, pos, text: str, checked: bool=False):
-        # TODO COMPLETE
-        super().__init__(pipe,
-                         (pos[0], pos[1] + 2),
-                         text)
-        self._checked = checked
-            
-    def toggle(self):
-        '''
-        Toggles the value of self._checked and updates it's aspect.
-        '''
-        self._checked = not self._checked
-        if self._checked:
-            self._opt = 
-
-"""            
-
 class DialogPipe(Pipe):
     '''
     DialogPipe class.
     '''
-    def __init__(self, str: dialog_txt, *args):
-        self._cursor = Cursor(self)
-        PipeText(self, (0, 0), dialog_text)
-        for opt in args:
-            #TODO: add options to pipe
-            pass
+    def __init__(self, dialog_txt: str, *args):
+        Pipe.__init__(self)
+        PipeText(self, (0, 0), dialog_txt)
+        self._avatar = Cursor(self)
+        
+        #TODO: add options to pipe
+        
         pass
+
+    def print(self, term_sizes, **kwargs):
+        '''
+        Prints the pipe content inside the rect 'term_sizes',
+        showing dialog text + options
+        '''
+        print(aspects.FRAME*term_sizes[1])
+        if max(self._rows) > term_sizes[0] and self.avatar.row > term_size[0]:
+            for r in range(self._avatar.row - term_size[0], term_size[0]):
+                self.get_row(r).print(term_sizes[1], -2)
+                pass
+            pass
+        else:
+            for r in range(term_sizes[0]):
+                self.get_row(r).print(term_sizes[1], -2)
+                pass
+            pass
+        print(aspects.FRAME*term_sizes[1])
+        
+        return
     
+    pass
+

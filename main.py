@@ -14,19 +14,25 @@ from structures import PipeTreeBox, PipeText
 from time import sleep
 from threading import Thread
 from exceptions import GetchInterrupt
-
+import dialogpipe
 # DEBUG/TEST stuff
-MAP_PIPE = MapPipe()
-WH.set_pipe(MAP_PIPE)
-AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
-pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
-pipelements.Tree(MAP_PIPE, (8, 7))
-pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
+if False:
+    MAP_PIPE = MapPipe()
+    WH.set_pipe(MAP_PIPE)
+    AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
+    pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
+    pipelements.Tree(MAP_PIPE, (8, 7))
+    pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
 
-PipeTreeBox(MAP_PIPE, (10, 10))
-PipeText(MAP_PIPE, (-1, -1), 'Test text on map')
-TEST_INTERACTABLE = pipelements.Interactable(MAP_PIPE, aspects.SKULL, (4, 4))
-TEST_INTERACTABLE.set_function(TEST_INTERACTABLE.delete)
+    PipeTreeBox(MAP_PIPE, (10, 10))
+    TEST_INTERACTABLE = pipelements.Interactable(MAP_PIPE, aspects.SKULL, (4, 4))
+    TEST_INTERACTABLE.set_function(TEST_INTERACTABLE.delete)
+    pass
+else:
+    D_PIPE = dialogpipe.DialogPipe("Menu")
+    WH.set_pipe(D_PIPE)
+    dialogpipe.DialogButton(D_PIPE, "opt1")
+    AVATAR = D_PIPE.avatar
 # end DEBUG/TEST stuff
 
 

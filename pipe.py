@@ -33,7 +33,7 @@ class Row(dict):
         '''
         print(FRAME, end='')
         k = from_col + 2
-        for lmnt_col in self.keys():
+        for lmnt_col in self.keys:
             if lmnt_col <= from_col + 1:
                 continue
             if lmnt_col >= from_col+term_col:
@@ -41,7 +41,9 @@ class Row(dict):
             print(BLANK*(lmnt_col-k) + self[lmnt_col].aspect, end='')
             k = lmnt_col + 1
         print(BLANK*((from_col+term_col)-k) + FRAME)
+        return
 
+    @property
     def keys(self) -> 'list[int]':
         '''
         Returns the set of keys as a sorted list
@@ -82,6 +84,7 @@ class Pipe:
         for row_index in range(from_row, from_row + term_sizes[0]):
             self.get_row(row_index).print(term_sizes[1], from_col)
         print(FRAME*term_sizes[1])
+        return
 
     def add(self, obj: 'PipeElement'):
         '''
