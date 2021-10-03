@@ -1,3 +1,4 @@
+from logger import log_, log_close
 '''
 A specific pipe to be used to simplify text dialogs
 '''
@@ -21,19 +22,29 @@ class Cursor(PipeElement):
         super().__init__(pipe, asp, (0,-1))
 
     def move(self, direct: 'Direction') -> bool:
+        log_("moving", direct)
+        try:
+            self._pipe.get(self.row, 0).hover(False)
+            pass
+        except AttributeError:
+            pass
         if direct == Direction.Up:
             if self._xy[0] == 0:
-                return False
+                pass
             self._xy = (self._xy[0]-1, self._xy[1])
-            return True
+            pass
         elif direct==Direction.Down:
-            if self._xy[0] == len(self._pipe._rows) -1:
+            if self.row == len(self._pipe._rows) -1:
                 return False
             self._xy = (self._xy[0] + 1, self._xy[1])
-            return True
+            pass
         else:
             # TODO implement opt navigation
             return False
+        try:
+            self._pipe.get(self.row, 0).hover(True)
+        except AttributeError:
+            pass
         return False
 
     '''
@@ -71,20 +82,28 @@ class DialogButton(PipeElement):
 
         if index == None:
             i = len(pipe.rows)
-            PipeElement.__init__(self, pipe, self._normal, (i, 0))
+            PipeElement.__init__(self, pipe, self._normal, (i, 0), append=False)
+            self._pipe.add(self)
+            self.update()
+        
             if text:
-                PipeText(pipe, (i, 1), text)
+                self._text=PipeText(pipe, (i, 1), text)
                 pass
         else:
-            PipeElement._init__(self, pipe, self._normal, (index, 0))
+            PipeElement._init__(self, pipe, self._normal, (index, 0), append=False)
+            self._pipe.add(self)
+            self.update()
             if text:
-                PipeText(pipe, (index, 1), text)
+                self._text=PipeText(pipe, (index, 1), text)
                 pass
             pass
         pass
 
     def hover(self, val: bool):
-        self._aspect = {True: self._hover, False: self._normal}[val]
+        if val:
+            self._emj = self._hover
+            return
+        self._emj = self._normal
         return
     
     def setCommand(self, command):

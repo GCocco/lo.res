@@ -86,7 +86,7 @@ class Pipe:
         print(FRAME*term_sizes[1])
         return
 
-    def add(self, obj: 'PipeElement'):
+    def add(self, obj):
         '''
         Adds a PipeElement in the row,col slot
         '''

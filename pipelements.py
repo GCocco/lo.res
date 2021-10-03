@@ -10,7 +10,7 @@ class PipeElement:
     Basic renderable class.
     '''
 
-    def __init__(self, pipe: 'Pipe', emj: str, xy: 'tuple[int, int]'):
+    def __init__(self, pipe: 'Pipe', emj: str, xy: 'tuple[int, int]', append=True):
         '''
         Constructor for PipeElement.
         the element is represented with emj glyph and is immediatly placed in xy.
@@ -18,8 +18,11 @@ class PipeElement:
         self._emj: str = emj
         self._xy: 'tuple[int, int]' = xy
         self._pipe = pipe
-        self._pipe.add(self)
-
+        if append:
+            self._pipe.add(self)
+            pass
+        pass
+    
     def as_tuple(self) -> str:
         '''
         Returns the Pipelement as a json-compatibile tuple
