@@ -53,7 +53,12 @@ def input_handler():
     except OverflowError:
         return
     signal.alarm(0)
-    if ch_input in ('w', 'W'):
+    if ch_input == '\x1b':
+        AVATAR.move({'[A': Direction.Up,
+                     '[B': Direction.Down,
+                     '[C': Direction.Right,
+                     '[D': Direction.Left}[getch() + getch()])
+    elif ch_input in ('w', 'W'):
         AVATAR.move(Direction.Up)
     elif ch_input in ('d', 'D'):
         AVATAR.move(Direction.Right)
@@ -61,6 +66,8 @@ def input_handler():
         AVATAR.move(Direction.Down)
     elif ch_input in ('a', 'A'):
         AVATAR.move(Direction.Left)
+    elif ch_input == '\n':
+        AVATAR()
     elif ch_input == 'Q':
         exit()
     WH.update()

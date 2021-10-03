@@ -51,7 +51,7 @@ class Cursor(PipeElement):
     When called, interacts with the option pointed
     '''
     def __call__(self):
-       print(self._pipe.get(*self._xy))
+       self._pipe.get(self.row, 0)()
        return
     pass
 
