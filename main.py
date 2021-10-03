@@ -32,6 +32,8 @@ else:
     D_PIPE = dialogpipe.DialogPipe("Menu")
     WH.set_pipe(D_PIPE)
     dialogpipe.DialogButton(D_PIPE, "opt1")
+    dialogpipe.DialogButton(D_PIPE, "opt2")
+    dialogpipe.DialogButton(D_PIPE, "opt3")
     AVATAR = D_PIPE.avatar
 # end DEBUG/TEST stuff
 
