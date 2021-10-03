@@ -143,8 +143,8 @@ class DialogPipe(Pipe):
         showing dialog text + options
         '''
         print(aspects.FRAME*term_sizes[1])
-        if max(self._rows) > term_sizes[0] and self.avatar.row > term_size[0]:
-            for r in range(self._avatar.row - term_size[0], term_size[0]):
+        if max(self._rows) > term_sizes[0] and self.avatar.row+2 > term_sizes[0]:
+            for r in range(self._avatar.row - term_sizes[0] + 2, self._avatar.row+2):
                 self.get_row(r).print(term_sizes[1], -2)
                 pass
             pass

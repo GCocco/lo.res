@@ -139,6 +139,10 @@ class Avatar(PipeElement):
         '''
         super().__init__(pipe, aspects.AVATAR, xy)
         pipe.set_avatar(self)
+        pass
+
+    def __call__(self):
+        return
 
     def move(self, direc: 'Direction') -> bool:
         '''
