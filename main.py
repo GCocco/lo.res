@@ -6,8 +6,6 @@ from windowhandler import WH
 from pipe import MapPipe
 from getch import getch
 
-
-
 import pipelements
 import aspects
 import signal
@@ -21,7 +19,7 @@ import dialogpipe
 # DEBUG/TEST stuff
 if False:
     MAP_PIPE = MapPipe()
-    WH.set_pipe(MAP_PIPE)
+    # WH.set_pipe(MAP_PIPE)
     Globals.stack().push(MAP_PIPE)
     AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
     pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
@@ -34,7 +32,7 @@ if False:
     pass
 else:
     D_PIPE = dialogpipe.DialogPipe("Menu")
-    WH.set_pipe(D_PIPE)
+    # WH.set_pipe(D_PIPE)
     Globals.stack().push(D_PIPE)
     dialogpipe.DialogButton(D_PIPE, "opt1")
     dialogpipe.DialogButton(D_PIPE, "opt2")

@@ -1,9 +1,11 @@
 '''
 Contains the class handling printing and size changes on terminal
 '''
+from globals import Globals
+
 from os import popen, system
 from time import sleep
-from threading import Thread, Semaphore
+from threading import Thread
 import aspects
 
 
@@ -16,15 +18,6 @@ class WH:
     _current_pipe = None
     update_flag = False
 
-    @staticmethod
-    def set_pipe(r_pipe: 'Pipe'):
-        '''
-        Sets the given pipe as the one to be rendered and updated
-        '''
-        WH.sem = Semaphore()
-        WH._current_pipe = r_pipe
-        WH.update_size()
-        WH.update()
 
     @staticmethod
     def update_size() -> bool:
@@ -46,27 +39,7 @@ class WH:
         '''
         WH.update_flag = False
         system("clear")
-        WH._current_pipe.print((WH._rows-4, WH._cols))
-
-    @staticmethod
-    def _printrow(row: 'pipe.Row'):
-        '''
-        Prints a single Pipe Row.
-        '''
-        offset: int = 0
-        if WH._current_pipe.avatar:
-            offset = WH._current_pipe.avatar.col - int(WH._cols/2)
-
-        k = 2 + offset
-        print(aspects.FRAME, end='')
-        for col in row.keys():
-            if col >= WH._cols + offset:
-                break
-            if col <= offset + 1:
-                continue
-            print(aspects.BLANK * (col-k) + row[col].aspect, end='')
-            k = col + 1
-        print(aspects.BLANK * ((WH._cols+offset)-k) + aspects.FRAME)
+        Globals.pipe().print((WH._rows-4, WH._cols))
 
     @staticmethod
     def _win_manager_loop():
