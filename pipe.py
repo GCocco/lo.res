@@ -1,11 +1,13 @@
 '''
 Here are defined Classes to easy handle the screen printing.
 '''
-
+from pipestack import init
 from exceptions import OccupiedSpaceError
 from json import load, dump
 from pipelements import from_string
 from aspects import BLANK, FRAME
+
+init()
 
 class Row(dict):
     '''
@@ -74,6 +76,10 @@ class Pipe:
         self._row_class = row_class
         self._rows = dict()
         self._avatar = None
+
+    def stack(self):
+        Globals.stack.push(self)
+        return
 
     def print(self, term_sizes, from_row=0, from_col=0):
         '''
