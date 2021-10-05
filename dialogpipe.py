@@ -19,33 +19,38 @@ class Cursor(PipeElement):
         assert isinstance(pipe, DialogPipe)
         if asp is None:
             asp = aspects.DIALOG_CURSOR
-        super().__init__(pipe, asp, (0,-1))
+        super().__init__(pipe, asp, (1,-1), append=False)
 
     def move(self, direct: 'Direction') -> bool:
-        log_("moving", direct)
-        try:
-            self._pipe.get(self.row, 0).hover(False)
-            pass
-        except AttributeError:
-            pass
+        old_row = self.row
+
         if direct == Direction.Up:
-            if self._xy[0] == 0:
-                pass
-            self._xy = (self._xy[0]-1, self._xy[1])
+            if self.row == 1:
+                return False
+            self._xy = (self.row-1, self.col)
             pass
         elif direct==Direction.Down:
             if self.row == len(self._pipe._rows) -1:
                 return False
-            self._xy = (self._xy[0] + 1, self._xy[1])
+            self._xy = (self.row + 1, self.col)
             pass
         else:
             # TODO implement opt navigation
             return False
-        try:
-            self._pipe.get(self.row, 0).hover(True)
-        except AttributeError:
-            pass
-        return False
+
+        if old_row is not self.row:
+            try:
+                self._pipe.get(old_row, 0).hover(False)
+                pass
+            except AttributeError:
+                pass
+
+            try:
+                self._pipe.get(self.row, 0).hover(True)
+            except AttributeError:
+                pass
+            return False
+        return
 
     '''
     When called, interacts with the option pointed
@@ -131,10 +136,7 @@ class DialogPipe(Pipe):
     def __init__(self, dialog_txt: str):
         Pipe.__init__(self)
         PipeText(self, (0, 0), dialog_txt)
-        self._avatar = Cursor(self)
-        
-        #TODO: add options to pipe
-        
+        self._avatar = Cursor(self)        
         pass
 
     def print(self, term_sizes, **kwargs):
