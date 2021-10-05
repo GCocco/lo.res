@@ -5,6 +5,7 @@ Main module for setting and input handling
 from globals import Globals
 from windowhandler import WH
 from pipe import MapPipe
+import pipes
 from getch import getch
 
 import pipelements
@@ -17,44 +18,7 @@ from time import sleep
 from threading import Thread
 from exceptions import GetchInterrupt
 import dialogpipe
-# DEBUG/TEST stuff
-if False:
-    MAP_PIPE = MapPipe()
-    MAP_PIPE.stack_push()
-    pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
-    pipelements.Tree(MAP_PIPE, (8, 7))
-    pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
 
-    PipeTreeBox(MAP_PIPE, (10, 10))
-    TEST_INTERACTABLE = pipelements.Interactable(MAP_PIPE, aspects.SKULL, (4, 4))
-    TEST_INTERACTABLE.set_function(TEST_INTERACTABLE.delete)
-    pass
-else:
-    D_PIPE = dialogpipe.DialogPipe("Menu")
-    D_PIPE.stack_push()
-    button = dialogpipe.DialogButton(D_PIPE, "opt1")
-    button.setCommand(dialogpipe.NoticePipe("ayylmao").stack_push)
-    dialogpipe.DialogButton(D_PIPE, "opt2")
-    dialogpipe.DialogButton(D_PIPE, "opt3")
-    dialogpipe.DialogButton(D_PIPE, "opt4")
-    dialogpipe.DialogButton(D_PIPE, "opt5")
-    dialogpipe.DialogButton(D_PIPE, "opt6")
-    dialogpipe.DialogButton(D_PIPE, "opt7")
-    dialogpipe.DialogButton(D_PIPE, "opt8")
-    dialogpipe.DialogButton(D_PIPE, "opt9")
-    dialogpipe.DialogButton(D_PIPE, "opt10")
-    dialogpipe.DialogButton(D_PIPE, "opt11")
-    dialogpipe.DialogButton(D_PIPE, "opt12")
-    dialogpipe.DialogButton(D_PIPE, "opt13")
-    dialogpipe.DialogButton(D_PIPE, "opt14")
-    dialogpipe.DialogButton(D_PIPE, "opt15")
-    dialogpipe.DialogButton(D_PIPE, "opt16")
-    dialogpipe.DialogButton(D_PIPE, "opt17")
-    dialogpipe.DialogButton(D_PIPE, "opt18")
-    dialogpipe.DialogButton(D_PIPE, "opt19")
-    dialogpipe.DialogButton(D_PIPE, "opt20")
-    dialogpipe.DialogButton(D_PIPE, "opt21")
-# end DEBUG/TEST stuff
 
 
 def input_handler():
@@ -93,6 +57,10 @@ def input_handler():
 
 
 if __name__ == "__main__":
+
+    main_menu = pipes.MainMenu()
+    main_menu.stack_push()
+    
     UPDATE_THREAD = WH.run_loop()
     while True:
         try:
