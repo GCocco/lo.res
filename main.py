@@ -19,9 +19,7 @@ import dialogpipe
 # DEBUG/TEST stuff
 if False:
     MAP_PIPE = MapPipe()
-    # WH.set_pipe(MAP_PIPE)
     Globals.stack().push(MAP_PIPE)
-    AVATAR = pipelements.Avatar(MAP_PIPE, (7, 7))
     pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
     pipelements.Tree(MAP_PIPE, (8, 7))
     pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
@@ -32,9 +30,9 @@ if False:
     pass
 else:
     D_PIPE = dialogpipe.DialogPipe("Menu")
-    # WH.set_pipe(D_PIPE)
     Globals.stack().push(D_PIPE)
-    dialogpipe.DialogButton(D_PIPE, "opt1")
+    button = dialogpipe.DialogButton(D_PIPE, "opt1")
+    button.setCommand(dialogpipe.NoticePipe("ayylmao").stack_push)
     dialogpipe.DialogButton(D_PIPE, "opt2")
     dialogpipe.DialogButton(D_PIPE, "opt3")
     dialogpipe.DialogButton(D_PIPE, "opt4")
@@ -55,7 +53,6 @@ else:
     dialogpipe.DialogButton(D_PIPE, "opt19")
     dialogpipe.DialogButton(D_PIPE, "opt20")
     dialogpipe.DialogButton(D_PIPE, "opt21")
-    AVATAR = D_PIPE.avatar
 # end DEBUG/TEST stuff
 
 
@@ -75,20 +72,20 @@ def input_handler():
         return
     signal.alarm(0)
     if ch_input == '\x1b':
-        AVATAR.move({'[A': Direction.Up,
+        Globals.pipe().avatar.move({'[A': Direction.Up,
                      '[B': Direction.Down,
                      '[C': Direction.Right,
                      '[D': Direction.Left}[getch() + getch()])
     elif ch_input in ('w', 'W'):
-        AVATAR.move(Direction.Up)
+        Globals.pipe().avatar.move(Direction.Up)
     elif ch_input in ('d', 'D'):
-        AVATAR.move(Direction.Right)
+        Globals.pipe().avatar.move(Direction.Right)
     elif ch_input in ('s', 'S'):
-        AVATAR.move(Direction.Down)
+        Globals.pipe().avatar.move(Direction.Down)
     elif ch_input in ('a', 'A'):
-        AVATAR.move(Direction.Left)
+        Globals.pipe().avatar.move(Direction.Left)
     elif ch_input == '\n':
-        AVATAR()
+        Globals.pipe().avatar()
     elif ch_input == 'Q':
         exit()
     WH.update()
