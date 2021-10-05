@@ -1,4 +1,6 @@
 from globals import Globals
+from windowhandler import WH
+
 
 class Node:
     def __init__(self, elm, nex=None):
@@ -29,11 +31,15 @@ class PipeStack:
     def push(self, new_pipe):
         if self._nodes:
             self._nodes = Node(new_pipe, nex=self._nodes)
+            WH.update()
             return
         self._nodes = Node(new_pipe)
+        WH.update()
         return
 
     def pop(self):
+        if self._nodes == None:
+            return exit()
         content = self._nodes.content
         self._nodes = self._nodes.next
         return content
