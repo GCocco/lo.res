@@ -2,7 +2,7 @@ from logger import log_, log_close
 '''
 A specific pipe to be used to simplify text dialogs
 '''
-
+from globals import Globals
 from pipe import Pipe
 from directions import Direction
 from structures import PipeText
@@ -120,7 +120,7 @@ class DialogButton(PipeElement):
         return
     
     def __call__(self):
-        self._command(*args, **kwargs)
+        self._command(*self._args, **self._kwargs)
         pass
     pass
 
@@ -128,7 +128,7 @@ class DialogPipe(Pipe):
     '''
     DialogPipe class.
     '''
-    def __init__(self, dialog_txt: str, *args):
+    def __init__(self, dialog_txt: str):
         Pipe.__init__(self)
         PipeText(self, (0, 0), dialog_txt)
         self._avatar = Cursor(self)
@@ -159,3 +159,8 @@ class DialogPipe(Pipe):
     
     pass
 
+class NoticePipe(DialogPipe):
+    def __init__(self, txt):
+        super().__init__(txt)
+        DialogButton(self, "close", command=Globals.stack().pop)
+        

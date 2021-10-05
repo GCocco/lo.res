@@ -1,6 +1,7 @@
 '''
 Main module for setting and input handling
 '''
+
 from globals import Globals
 from windowhandler import WH
 from pipe import MapPipe
@@ -19,7 +20,7 @@ import dialogpipe
 # DEBUG/TEST stuff
 if False:
     MAP_PIPE = MapPipe()
-    Globals.stack().push(MAP_PIPE)
+    MAP_PIPE.stack_push()
     pipelements.PipeElement(MAP_PIPE, aspects.WALL, (7, 6))
     pipelements.Tree(MAP_PIPE, (8, 7))
     pipelements.from_string('Tree')(MAP_PIPE, (8, 9))
@@ -30,7 +31,7 @@ if False:
     pass
 else:
     D_PIPE = dialogpipe.DialogPipe("Menu")
-    Globals.stack().push(D_PIPE)
+    D_PIPE.stack_push()
     button = dialogpipe.DialogButton(D_PIPE, "opt1")
     button.setCommand(dialogpipe.NoticePipe("ayylmao").stack_push)
     dialogpipe.DialogButton(D_PIPE, "opt2")

@@ -1,6 +1,7 @@
 '''
 Here are defined Classes to easy handle the screen printing.
 '''
+from globals import Globals
 from pipestack import init
 from exceptions import OccupiedSpaceError
 from json import load, dump
@@ -77,9 +78,12 @@ class Pipe:
         self._rows = dict()
         self._avatar = None
 
-    def stack(self):
-        Globals.stack.push(self)
+    def stack_push(self):
+        Globals.stack().push(self)
         return
+
+    def stack_pop(self):
+        Globals.stack().pop()
 
     def print(self, term_sizes, from_row=0, from_col=0):
         '''
