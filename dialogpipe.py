@@ -165,4 +165,19 @@ class NoticePipe(DialogPipe):
     def __init__(self, txt):
         super().__init__(txt)
         DialogButton(self, "close", command=Globals.stack().pop)
-        
+        pass
+    pass
+
+
+class InGameMenuPipe(DialogPipe):
+    def __init__(self):
+        super().__init__("Pause")
+        DialogButton(self, "Save")  # TODO: add saving
+        DialogButton(self, "Load")  # TODO: add load
+        DialogButton(self, "Inventory")  # TODO: add inventory
+        # etc
+        DialogButton(self, "Back", self.stack_pop)
+        DialogButton(self, "Quit", exit)
+        pass
+    pass
+

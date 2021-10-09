@@ -53,6 +53,8 @@ def input_handler():
         Globals.pipe().avatar()
     elif ch_input == 'Q':
         exit()
+    else:
+        Globals.pipe().process_key(ch_input)
     WH.update()
 
 

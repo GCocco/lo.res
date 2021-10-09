@@ -17,6 +17,7 @@ class WorldMap(pipe.MapPipe):
         super().__init__()
         structures.PipeTreeBox(self, (3,3))
         self._avatar = pipelements.Avatar(self, (0,0))
+        self._keymap ={"m": dialogpipe.InGameMenuPipe().stack_push}
         pass
     pass
 

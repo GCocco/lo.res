@@ -7,7 +7,7 @@ from exceptions import OccupiedSpaceError
 from json import load, dump
 from pipelements import from_string
 from aspects import BLANK, FRAME
-
+from windowhandler import WH
 init()
 
 class Row(dict):
@@ -77,9 +77,18 @@ class Pipe:
         self._row_class = row_class
         self._rows = dict()
         self._avatar = None
+        self._keymap = {}
+        pass
+
+    def process_key(self, key):
+        if key in self._keymap:
+            self._keymap[key]()
+            pass
+        return
 
     def stack_push(self):
         Globals.stack().push(self)
+        WH.update()
         return
 
     def stack_pop(self):
