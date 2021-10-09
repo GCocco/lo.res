@@ -7,6 +7,7 @@ WALL = '🔲'
 BLANK = '  '
 TREE = '🌲'
 SKULL = '💀'
+CHEST = '📦'
 
 DIALOG_UNCHECKED = '❌'
 DIALOG_CHECKED = '⭕️'

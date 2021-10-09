@@ -172,6 +172,8 @@ class Avatar(PipeElement):
             lmnt = occupied.lmnt
             if isinstance(lmnt, Interactable):
                 lmnt()
+                self._pipe.delete(*backup_pos)
+                return True
             self._xy = backup_pos
             return False
 
@@ -189,3 +191,11 @@ def from_string(name: str):
         'Avatar': Avatar,
         'Tree': Tree,
         }.get(name, lambda pipe, coord: PipeElement(pipe, name, coord))
+
+
+class Chest(Interactable):
+    def __init__(self, pipe, pos, content=None):
+        super().__init__(pipe, aspects.CHEST, pos)
+        pass
+    pass
+
