@@ -1,3 +1,6 @@
+from globals import Globals
+import dialogpipe
+
 class _Item:
     def __init__(self, name, aspect, num=1):
         self._name = name
@@ -10,18 +13,35 @@ class _Item:
         return self._name
     
     @property
+    def aspect(self):
+        return self._aspect
+    
+    @property
     def num(self):
         return self._num
 
     def changeNum(self, n):
         self._num += n
         return self._num
-    
+
+    def toPipe(self, pipe, *args, **kwargs):
+        return PipeItem(pipe, self)
     pass
+
+
+class PipeItem(dialogpipe.DialogButton):
+    def __init__(self, pipe, item, *args, **kwargs):
+        super().__init__(pipe,
+                         text=(item.name+' ' + str(item.num)),
+                         normal=item.aspect,
+                         command=item, *args, **kwargs)
+        pass
+    pass
+
 
 class Inventory:
     def __init__(self):
-        self._list = None
+        self._list = []
         pass
 
 
@@ -57,7 +77,24 @@ class Inventory:
             pass
         return True
 
-    
-    
+    @property
+    def list(self):
+        return self._list
+
     pass
 
+
+class Player:
+    def __init__(self):
+        self._inventory = Inventory()
+        pass
+
+    @property
+    def inventory(self):
+        return self._inventory
+    pass
+
+
+
+def init():
+    Globals.init('player', Player())
