@@ -7,10 +7,10 @@ from windowhandler import WH
 from pipe import MapPipe
 import pipes
 from getch import getch
-
 import pipelements
 import aspects
 import signal
+import player
 
 from directions import Direction
 from structures import PipeTreeBox, PipeText
@@ -60,6 +60,7 @@ def input_handler():
 
 if __name__ == "__main__":
 
+    player.init()
     main_menu = pipes.MainMenu()
     main_menu.stack_push()
     
