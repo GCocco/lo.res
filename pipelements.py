@@ -4,6 +4,7 @@ This module contains pipe-renderable classes.
 from exceptions import OccupiedSpaceError
 from directions import Direction
 import aspects
+from globals import Globals
 
 class PipeElement:
     '''
@@ -196,6 +197,11 @@ def from_string(name: str):
 class Chest(Interactable):
     def __init__(self, pipe, pos, content=None):
         super().__init__(pipe, aspects.CHEST, pos)
+        self._content = content
         pass
+
+    def __call__(self):
+        Globals.player().inventory.insert(self._content)
+        return
     pass
 

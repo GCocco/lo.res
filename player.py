@@ -1,11 +1,15 @@
 from globals import Globals
 import dialogpipe
+import aspects
 
-class _Item:
-    def __init__(self, name, aspect, num=1):
+class Item:
+    def __init__(self, name, aspect=aspects.ITEM_DEFAULT, num=1):
         self._name = name
         self._aspect = aspect
         self._num = num
+        pass
+
+    def __call__(self):
         pass
 
     @property
@@ -52,15 +56,12 @@ class Inventory:
             pass
         return None
     
-    def insert(self, name, aspect, num=1):
-        if num <1:
-            raise Exception("num must be >0")
-        i = self.getItem(name)
+    def insert(self, item):
+        i = self.getItem(item.name)
         if i != None:
             self._list[i].changeNum(num)
             return
-        self._list.append(_Item(name, aspect, num=num))
-        # TODO: Items may differ and should be inheritable
+        self._list.append(item)
         return
 
     def discard(self, name, num):

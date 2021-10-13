@@ -8,6 +8,7 @@ BLANK = '  '
 TREE = '🌲'
 SKULL = '💀'
 CHEST = '📦'
+ITEM_DEFAULT = '🔰'
 
 DIALOG_UNCHECKED = '❌'
 DIALOG_CHECKED = '⭕️'
